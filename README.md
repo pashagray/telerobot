@@ -1,8 +1,49 @@
 # Telerobot
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/telerobot`. To experiment with that code, run `bin/console` for an interactive prompt.
+Microframework to develop easy scalable and stateful telegram bots with ruby! Works perfectly with Rails, but Rails-agnostic by design.
 
-TODO: Delete this and the text above, and describe your gem
+```ruby
+class IntroState
+  include Telerobot::State
+
+  command_mapping({
+    "/start" => :menu
+  })
+
+  def menu
+    move_to MenuState
+  end
+end
+
+class MenuState
+  include Telerobot::State
+
+  command_mapping({
+    "I'm lucky!" => :random,
+    "Back" => :back,
+    /[A-Za-z\s]+/ => :search
+  })
+
+  def after_enter
+    current_chat
+      .message("Type author name to find cool books or try your luck")
+      .keyboard([["I'm lucky!"]])
+      .send_now
+  end
+
+  def random
+    # your logic
+  end
+
+  def back
+    move_to IntroState
+  end
+
+  def search
+    # your logic
+  end
+end
+```
 
 ## Installation
 
