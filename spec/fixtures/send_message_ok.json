@@ -1,0 +1,20 @@
+{
+  "ok": true,
+  "result": {
+      "message_id": 358,
+      "from": {
+          "id": 1328353864,
+          "is_bot": true,
+          "first_name": "TelerobotTest",
+          "username": "telerobot_test_bot"
+      },
+      "chat": {
+          "id": 1,
+          "first_name": "Thomas",
+          "last_name": "Anderson",
+          "type": "private"
+      },
+      "date": 1597912273,
+      "text": "Test message"
+  }
+}
