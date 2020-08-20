@@ -23,8 +23,8 @@ module Telerobot
     end
 
     def call(message, callback_query, session)
-      @message = message.transform_keys(&:to_sym)
-      @callback_query = callback_query.transform_keys(&:to_sym)
+      @message = Utils.deep_symbolize_keys(message)
+      @callback_query = Utils.deep_symbolize_keys(callback_query)
       @session = session
       option = nil
       @command = (callback_query && callback_query[:data]) || message[:text]
