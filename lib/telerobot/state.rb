@@ -18,7 +18,11 @@ module Telerobot
       end
 
       def mapping
-        @mapping || {}
+        parent_class_mapping.merge(@mapping || {})
+      end
+
+      def parent_class_mapping
+        superclass.respond_to?(:mapping) ? superclass.mapping : {}
       end
     end
 

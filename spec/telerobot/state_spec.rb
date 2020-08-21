@@ -13,6 +13,14 @@ end
 
 class BaseState
   include Telerobot::State
+
+  command_mapping({
+    "/shared_command" => :shared_command
+  })
+
+  def shared_command
+    print "Shared command is called"
+  end
 end
 
 class StartState < BaseState
@@ -114,6 +122,16 @@ RSpec.describe Telerobot::State do
         expect { StartState.new.call(message, {}, session) }
           .to output(/Entering SecondScreenState state finish/)
           .to_stdout
+      end
+    end
+
+    describe "shared commands" do
+      let(:message) { { chat_id: 1, text: "/shared_command" } }
+
+      it "uses command from parent class" do
+        expect { StartState.new.call(message, {}, session) }
+        .to output(/Shared command is called/)
+        .to_stdout
       end
     end
 
