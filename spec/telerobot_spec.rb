@@ -5,8 +5,10 @@ RSpec.describe Telerobot do
     context "with /start message" do
       let(:params) do
         {
+          "chat" => {
+            "id" => 1
+          },
           "message" => {
-            "chat_id" => 1,
             "text" => "/start"
           }
         }
