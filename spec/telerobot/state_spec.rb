@@ -2,7 +2,7 @@ require_relative "../fixtures/testcase"
 
 RSpec.describe Telerobot::State do
   describe "#call" do
-    let(:session) { SessionMock.new(chat_id: 1) }
+    let(:session) { Telerobot::SessionMock.new(chat_id: 1) }
 
     describe "command /start" do
       let(:message) { { chat_id: 1, text: "/start" } }

@@ -14,7 +14,7 @@ RSpec.describe Telerobot do
         }
       end
 
-      let(:session_class) { SessionMock }
+      let(:session_class) { Telerobot::SessionMock }
       let(:initial_state) { StartState }
 
       it "runs command for initial state" do
