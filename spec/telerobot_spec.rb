@@ -1,9 +1,25 @@
-# RSpec.describe Telerobot do
-#   it "has a version number" do
-#     expect(Telerobot::VERSION).not_to be nil
-#   end
+require_relative "./fixtures/testcase"
 
-#   it "does something useful" do
-#     expect(false).to eq(true)
-#   end
-# end
+RSpec.describe Telerobot do
+  describe ".run" do
+    context "with /start message" do
+      let(:params) do
+        {
+          "message" => {
+            "chat_id" => 1,
+            "text" => "/start"
+          }
+        }
+      end
+
+      let(:session_class) { SessionMock }
+      let(:initial_state) { StartState }
+
+      it "runs command for initial state" do
+        expect {
+          Telerobot.run(params, initial_state: initial_state, session_class: session_class)
+        }.to output("start method invoked!").to_stdout
+      end
+    end
+  end
+end
