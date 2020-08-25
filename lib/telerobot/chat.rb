@@ -3,8 +3,8 @@ require "json"
 
 module Telerobot
   class Chat
-    def initialize(chat_id)
-      @uri = URI("https://api.telegram.org/bot#{Config.bot_token}/sendMessage")
+    def initialize(chat_id:, token:)
+      @uri = URI("https://api.telegram.org/bot#{token}/sendMessage")
       @chat_id = chat_id
       @message = nil
       @keyboard = nil
