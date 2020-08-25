@@ -1,6 +1,8 @@
 require "bundler/setup"
-require 'webmock/rspec'
+require "webmock"
+require "vcr_setup"
 require "telerobot"
+
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

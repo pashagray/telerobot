@@ -5,6 +5,10 @@ class BaseState
     "/shared_command" => :shared_command
   })
 
+  configure do |config|
+    config.bot_token = "token"
+  end
+
   def shared_command
     print "Shared command is called"
   end
@@ -41,11 +45,52 @@ class StartState < BaseState
 end
 
 class SecondScreenState < BaseState
+  configure do |config|
+    config.bot_token = "another token"
+  end
+
   def before_enter
     print "Entering #{self.class.name} state start"
   end
 
   def after_enter
     print "Entering #{self.class.name} state finish"
+  end
+end
+
+class Chat
+  def initialize(chat_id:, token:)
+    @chat_id = chat_id
+    @token = token
+    @message = nil
+    @photos = nil
+    @keyboard = nil
+    @inline_keyboard = nil
+  end
+
+  def message(message)
+    @message = message
+    self
+  end
+
+  def photos(photos)
+    @photos = photos
+    self
+  end
+
+  def photo(photo)
+    photos([photo])
+    self
+  end
+
+  def keyboard(keyboard, one_time_keyboard: false)
+    @keyboard = keyboard
+    @one_time_keyboard = one_time_keyboard
+    self
+  end
+
+  def inline_keyboard(inline_keyboard)
+    @inline_keyboard = inline_keyboard
+    self
   end
 end

@@ -1,12 +1,18 @@
+# frozen_string_literal: true
+
 require "net/http"
 require "json"
 
+require_relative "./telegram/api"
+
 module Telerobot
   class Chat
-    def initialize(chat_id)
-      @uri = URI("https://api.telegram.org/bot#{Config.bot_token}/sendMessage")
+    include Telegram::Api
+
+    def initialize(chat_id:, token:)
       @chat_id = chat_id
       @message = nil
+      @photos = nil
       @keyboard = nil
       @inline_keyboard = nil
     end
@@ -27,30 +33,14 @@ module Telerobot
       self
     end
 
-    def send_now
-      query = { chat_id: @chat_id }
-      query[:text] = @message if @message
-      if @keyboard
-        query[:reply_markup] = {
-          keyboard: @keyboard,
-          one_time_keyboard: @one_time_keyboard
-        }
-      end
-      if @inline_keyboard
-        query[:reply_markup] = {
-          inline_keyboard: @inline_keyboard
-        }
-      end
-      request!(query)
+    def photos(photos)
+      @photos = photos
+      self
     end
 
-    def request!(query)
-      Net::HTTP.start(@uri.host, @uri.port, use_ssl: true) do |http|
-        req = Net::HTTP::Post.new(@uri)
-        req['Content-Type'] = "application/json"
-        req.body = query.to_json
-        http.request(req)
-      end
+    def photo(photo)
+      photos([photo])
+      self
     end
   end
 end

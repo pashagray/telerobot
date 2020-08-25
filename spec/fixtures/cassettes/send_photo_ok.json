@@ -1,0 +1,72 @@
+{
+  "http_interactions": [
+    {
+      "request": {
+        "method": "post",
+        "uri": "https://api.telegram.org/bot1295081136:AAFeO6O-nqz43wSYtKrD0RW_NEz60FdH-fd/sendPhoto",
+        "body": {
+          "encoding": "US-ASCII",
+          "string": ""
+        },
+        "headers": {
+          "Accept-Encoding": [
+            "gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          ],
+          "Accept": [
+            "*/*"
+          ],
+          "User-Agent": [
+            "Ruby"
+          ],
+          "Host": [
+            "api.telegram.org"
+          ],
+          "Content-Type": [
+            "multipart/form-data"
+          ]
+        }
+      },
+      "response": {
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "headers": {
+          "Server": [
+            "nginx/1.16.1"
+          ],
+          "Date": [
+            "Wed, 26 Aug 2020 08:06:06 GMT"
+          ],
+          "Content-Type": [
+            "application/json"
+          ],
+          "Content-Length": [
+            "781"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000; includeSubDomains; preload"
+          ],
+          "Access-Control-Allow-Origin": [
+            "*"
+          ],
+          "Access-Control-Allow-Methods": [
+            "GET, POST, OPTIONS"
+          ],
+          "Access-Control-Expose-Headers": [
+            "Content-Length,Content-Type,Date,Server,Connection"
+          ]
+        },
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"ok\":true,\"result\":{\"message_id\":1473,\"from\":{\"id\":1295081136,\"is_bot\":true,\"first_name\":\"vergil_and_me\",\"username\":\"vergil_and_bot\"},\"chat\":{\"id\":589448234,\"first_name\":\"\\u0410\\u0439\\u0431\\u0435\\u043a\",\"last_name\":\"\\u0418\\u0436\\u0430\\u043d\\u043e\\u0432\",\"username\":\"aibekizhanov\",\"type\":\"private\"},\"date\":1598429166,\"photo\":[{\"file_id\":\"AgACAgIAAxkDAAIFwV9GF-7L0ubKh_WyRPvj6-GZjhSNAAJwrzEbzLgxSjNqOjXstvZWPuTmki4AAwEAAwIAA20AA1OuBQABGwQ\",\"file_unique_id\":\"AQADPuTmki4AA1OuBQAB\",\"file_size\":11206,\"width\":153,\"height\":320},{\"file_id\":\"AgACAgIAAxkDAAIFwV9GF-7L0ubKh_WyRPvj6-GZjhSNAAJwrzEbzLgxSjNqOjXstvZWPuTmki4AAwEAAwIAA3gAA1SuBQABGwQ\",\"file_unique_id\":\"AQADPuTmki4AA1SuBQAB\",\"file_size\":28652,\"width\":311,\"height\":651}],\"caption\":\"I'll open my casino with blackjack and whores!\"}}"
+        }
+      },
+      "recorded_at": "Wed, 26 Aug 2020 08:06:06 GMT"
+    }
+  ],
+  "recorded_with": "VCR 6.0.0"
+}

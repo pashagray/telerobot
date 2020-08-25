@@ -1,0 +1,72 @@
+{
+  "http_interactions": [
+    {
+      "request": {
+        "method": "post",
+        "uri": "https://api.telegram.org/bot1295081136:AAFeO6O-nqz43wSYtKrD0RW_NEz60FdH-fd/sendMessage",
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"chat_id\":\"5894482\",\"text\":\"I'm message\",\"parse_mode\":\"Markdown\",\"reply_markup\":{\"inline_keyboard\":[[{\"text\":\"Inline button from VCR\",\"url\":\"http://example.com\"}]]}}"
+        },
+        "headers": {
+          "Accept-Encoding": [
+            "gzip;q=1.0,deflate;q=0.6,identity;q=0.3"
+          ],
+          "Accept": [
+            "*/*"
+          ],
+          "User-Agent": [
+            "Ruby"
+          ],
+          "Host": [
+            "api.telegram.org"
+          ],
+          "Content-Type": [
+            "application/json"
+          ]
+        }
+      },
+      "response": {
+        "status": {
+          "code": 200,
+          "message": "OK"
+        },
+        "headers": {
+          "Server": [
+            "nginx/1.16.1"
+          ],
+          "Date": [
+            "Wed, 26 Aug 2020 07:48:58 GMT"
+          ],
+          "Content-Type": [
+            "application/json"
+          ],
+          "Content-Length": [
+            "440"
+          ],
+          "Connection": [
+            "keep-alive"
+          ],
+          "Strict-Transport-Security": [
+            "max-age=31536000; includeSubDomains; preload"
+          ],
+          "Access-Control-Allow-Origin": [
+            "*"
+          ],
+          "Access-Control-Allow-Methods": [
+            "GET, POST, OPTIONS"
+          ],
+          "Access-Control-Expose-Headers": [
+            "Content-Length,Content-Type,Date,Server,Connection"
+          ]
+        },
+        "body": {
+          "encoding": "UTF-8",
+          "string": "{\"ok\":true,\"result\":{\"message_id\":1470,\"from\":{\"id\":1295081136,\"is_bot\":true,\"first_name\":\"vergil_and_me\",\"username\":\"vergil_and_bot\"},\"chat\":{\"id\":589448234,\"first_name\":\"\\u0410\\u0439\\u0431\\u0435\\u043a\",\"last_name\":\"\\u0418\\u0436\\u0430\\u043d\\u043e\\u0432\",\"username\":\"aibekizhanov\",\"type\":\"private\"},\"date\":1598428138,\"text\":\"I'm message\",\"reply_markup\":{\"inline_keyboard\":[[{\"text\":\"Inline button from VCR\",\"url\":\"http://example.com/\"}]]}}}"
+        }
+      },
+      "recorded_at": "Wed, 26 Aug 2020 07:48:58 GMT"
+    }
+  ],
+  "recorded_with": "VCR 6.0.0"
+}
