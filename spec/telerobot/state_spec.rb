@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "../fixtures/testcase"
 
 RSpec.describe Telerobot::State do
@@ -6,7 +8,7 @@ RSpec.describe Telerobot::State do
 
     describe "command /start" do
       let(:message) { { chat_id: 1, text: "/start" } }
-  
+
       it "accepts /start command and calls #start method" do
         expect { StartState.new.call(message, {}, session) }
           .to output("start method invoked!").to_stdout
@@ -20,7 +22,7 @@ RSpec.describe Telerobot::State do
         it "accepts command and maps it to method via regex" do
           expect { StartState.new.call(message, {}, session) }
             .to output("regex_one method invoked!").to_stdout
-        end        
+        end
       end
     end
 
@@ -114,6 +116,66 @@ RSpec.describe Telerobot::State do
               end
             HEREDOC
           )
+      end
+    end
+  end
+
+  describe "#current_chat" do
+    let(:state) { StartState.new }
+
+    before do
+      allow(state).to receive(:session).and_return(OpenStruct.new(chat_id: 1))
+    end
+
+    it "return Chat class object" do
+      expect(state.current_chat).to be_an_instance_of(Telerobot::Chat)
+    end
+  end
+
+  describe ".configure" do
+    let(:session) { Telerobot::SessionMock.new(chat_id: 1) }
+    let(:message) { { chat_id: 1, text: "/shared_command" } }
+
+    describe "when configure not defined in base state" do
+      class Base; include Telerobot::State end
+      class CustomState < Base
+        command_mapping({ "/shared_command" => :shared_command })
+        def shared_command
+          print "shared command"
+        end
+      end
+
+      it "raise error around initializer" do
+        expect{ CustomState.new.call(message, {}, session) }
+          .to raise_error(Telerobot::Error)
+          .with_message(
+            <<~HEREDOC
+              Bot token must be provided.
+              You should configure your class with telegram bot token
+              Add to your CustomState class configure class method
+              Example:
+                class CustomState
+                  include Telerobot::State
+
+                  configure do |config|
+                    config.bot_token = "token"
+                  end
+                end
+            HEREDOC
+          )
+      end
+    end
+
+    describe "when configure defined" do
+      it "uses config from parent class" do
+        state = StartState.new
+        expect(state.class.config).to be_a(Telerobot::Config)
+        expect(state.class.config.bot_token).to eq("token")
+      end
+
+      it "available configure two and more telegram bots" do
+        expect(StartState.config.bot_token).to eq("token")
+        expect(SecondScreenState.config.bot_token).to eq("another token")
       end
     end
   end

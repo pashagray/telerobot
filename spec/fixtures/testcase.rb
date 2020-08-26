@@ -5,6 +5,10 @@ class BaseState
     "/shared_command" => :shared_command
   })
 
+  configure do |config|
+    config.bot_token = "token"
+  end
+
   def shared_command
     print "Shared command is called"
   end
@@ -41,6 +45,10 @@ class StartState < BaseState
 end
 
 class SecondScreenState < BaseState
+  configure do |config|
+    config.bot_token = "another token"
+  end
+
   def before_enter
     print "Entering #{self.class.name} state start"
   end

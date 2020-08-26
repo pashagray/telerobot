@@ -13,6 +13,7 @@ module Telerobot
       # /-string-include-/ => bar
       # })
       #
+
       def command_mapping(mapping)
         @mapping = mapping
       end
@@ -24,9 +25,27 @@ module Telerobot
       def parent_class_mapping
         superclass.respond_to?(:mapping) ? superclass.mapping : {}
       end
+
+      def configure
+        yield set_config
+      end
+
+      def set_config
+        @config = Config.new
+      end
+
+      def config
+        @config ||= parent_class_config
+      end
+
+      def parent_class_config
+        superclass.respond_to?(:config) ? superclass.config : Config.new
+      end
     end
 
     def call(message, callback_query, session)
+      telegram_bot_token_missing unless config.bot_token
+
       @message = Utils.deep_symbolize_keys(message)
       @callback_query = Utils.deep_symbolize_keys(callback_query)
       @session = session
@@ -72,7 +91,7 @@ module Telerobot
     end
 
     def current_chat
-      Chat.new(@session.chat_id)
+      Chat.new(chat_id: session.chat_id, token: config.bot_token)
     end
 
     def on_contact_receive
@@ -89,6 +108,10 @@ module Telerobot
 
     def callback_query
       @callback_query || {}
+    end
+
+    def config
+      self.class.config
     end
 
     def unknown_command
@@ -119,6 +142,23 @@ module Telerobot
           def #{self.class.mapping[@command]}
             # your logic
           end
+        HEREDOC
+    end
+
+    def telegram_bot_token_missing
+      raise Error,
+        <<~HEREDOC
+          Bot token must be provided.
+          You should configure your class with telegram bot token
+          Add to your #{self.class.name} class configure class method
+          Example:
+            class #{self.class.name}
+              include Telerobot::State
+
+              configure do |config|
+                config.bot_token = "token"
+              end
+            end
         HEREDOC
     end
 
