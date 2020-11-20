@@ -6,7 +6,7 @@ RSpec.describe Telerobot::Utils do
           "aa": {
             "aaa": "x",
             "aab": "x",
-            aaa: "x"
+            aac: "x"
           },
           "ab": "x",
           ac: "x"
@@ -21,7 +21,7 @@ RSpec.describe Telerobot::Utils do
           aa: {
             aaa: "x",
             aab: "x",
-            aaa: "x"
+            aac: "x"
           },
           ab: "x",
           ac: "x"
