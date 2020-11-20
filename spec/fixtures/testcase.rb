@@ -57,3 +57,13 @@ class SecondScreenState < BaseState
     print "Entering #{self.class.name} state finish"
   end
 end
+
+class SettingsScreen < BaseState
+  def before_enter
+    print "Entering #{self.class.name} state start"
+  end
+
+  def after_enter
+    print "Entering #{self.class.name} state finish"
+  end
+end
