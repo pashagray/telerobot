@@ -1,13 +1,18 @@
+# frozen_string_literal: true
+
+require "net/http"
+require "json"
 require "telerobot/version"
 require "telerobot/utils"
 require "telerobot/config"
 require "telerobot/session_mock"
 require "telerobot/chat"
 require "telerobot/state"
+require "telerobot/telegram/api"
 
-module Telerobot  
+module Telerobot
   class Error < StandardError; end
-  
+
   def run(query, initial_state:, session_class:)
     symbolized_query = Utils.deep_symbolize_keys(query)
     message = symbolized_query[:message]
