@@ -25,10 +25,10 @@ module Telerobot
       self
     end
 
-    def keyboard(keyboard, onetime: false, resize: true)
+    def keyboard(keyboard, **options)
       @keyboard = keyboard
-      @one_time_keyboard = onetime
-      @resize_keyboard = resize
+      @one_time_keyboard = options.fetch(:onetime, false)
+      @resize_keyboard = options.fetch(:resize, false)
       self
     end
 
