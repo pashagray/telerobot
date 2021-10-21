@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    telerobot (0.2.4)
+    telerobot (0.2.5)
 
 GEM
   remote: https://rubygems.org/

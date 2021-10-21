@@ -38,7 +38,8 @@ module Telerobot
     end
 
     def send_now
-      @api.send_message(@message, reply_markup) unless @photos
+      return @api.send_message(@message, reply_markup) unless @photos
+
       @api.send_photo(@message, *@photos, reply_markup) if @photos.size == 1
     end
 
