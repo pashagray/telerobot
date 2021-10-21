@@ -45,7 +45,6 @@ module Telerobot
 
     def reply_markup
       reply_markup = {}
-      return reply_markup unless @keyboard && @inline_keyboard
 
       if @keyboard
         reply_markup[:reply_markup] = {
@@ -60,6 +59,8 @@ module Telerobot
           inline_keyboard: @inline_keyboard
         }
       end
+
+      reply_markup
     end
   end
 end
