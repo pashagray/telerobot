@@ -13,7 +13,7 @@ RSpec.describe Telerobot::Telegram::Api do
 
       it "return success response" do
         stub_request(:post, "https://api.telegram.org/bot#{token}/sendMessage")
-          .with(body: { chat_id: chat_id, text: "I'm message" }.to_json)
+          .with(body: { chat_id: chat_id, text: "I'm message" }.to_json, headers: { "Content-Type" => "application/json" })
           .to_return(status: 200, body: File.read("spec/fixtures/send_message_ok.json"))
         expect(api.send_message("I'm message", {})).to be_a(Net::HTTPOK)
       end
@@ -26,8 +26,8 @@ RSpec.describe Telerobot::Telegram::Api do
 
       it "return unauthorized error" do
         stub_request(:post, "https://api.telegram.org/bot#{token}/sendMessage")
-          .with(body: { chat_id: chat_id, text: "I'm message" }.to_json)
-          .to_return(status: 401, body: {ok: false, error_code: 401, description: "Unauthorized"}.to_json)
+          .with(body: { chat_id: chat_id, text: "I'm message" }.to_json, headers: { "Content-Type" => "application/json" })
+          .to_return(status: 401, body: { ok: false, error_code: 401, description: "Unauthorized" }.to_json)
         expect(api.send_message("I'm message", {})).to be_a(Net::HTTPUnauthorized)
       end
     end
@@ -39,8 +39,8 @@ RSpec.describe Telerobot::Telegram::Api do
 
       it "return bad request error" do
         stub_request(:post, "https://api.telegram.org/bot#{token}/sendMessage")
-          .with(body: { chat_id: chat_id, text: "I'm message" }.to_json)
-          .to_return(status: 400, body: { ok: false, error_code: 400, description: "Bad Request: chat not found"}.to_json)
+          .with(body: { chat_id: chat_id, text: "I'm message" }.to_json, headers: { "Content-Type" => "application/json" })
+          .to_return(status: 400, body: { ok: false, error_code: 400, description: "Bad Request: chat not found" }.to_json)
         expect(api.send_message("I'm message", {})).to be_a(Net::HTTPBadRequest)
       end
     end
@@ -50,11 +50,11 @@ RSpec.describe Telerobot::Telegram::Api do
       let(:chat_id) { -10041265 }
       let(:api) { Telerobot::Telegram::Api.new(chat_id, token) }
 
-      it "return bad request error" do
+      it "returns bad request error" do
         stub_request(:post, "https://api.telegram.org/bot#{token}/sendMessage")
-          .with(body: { chat_id: chat_id, text: "I'm message", reply_markup: {keyboard: {text: "Button"}} }.to_json)
-          .to_return(status: 400, body: { ok: false, error_code: 400, description: "Bad Request"}.to_json)
-        expect(api.send_message("I'm message", {reply_markup: {keyboard: {text: "Button"}}})).to be_a(Net::HTTPBadRequest)
+          .with(body: { chat_id: chat_id, text: "I'm message", reply_markup: {keyboard: { text: "Button" }} }.to_json)
+          .to_return(status: 400, body: { ok: false, error_code: 400, description: "Bad Request" }.to_json)
+        expect(api.send_message("I'm message", { reply_markup: { keyboard: { text: "Button" }}})).to be_a(Net::HTTPBadRequest)
       end
     end
   end

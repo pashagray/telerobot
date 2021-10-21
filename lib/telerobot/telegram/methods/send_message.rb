@@ -10,8 +10,8 @@ module Telerobot
             query = { chat_id: chat_id, text: text }.merge(reply_markup)
 
             Net::HTTP.start(uri.host, uri.port, use_ssl: true) do |http|
-              req["Content-Type"] = "application/json"
               req = Net::HTTP::Post.new(uri)
+              req["Content-Type"] = "application/json"
               req.body = query.to_json
               http.request(req)
             end

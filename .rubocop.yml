@@ -4,3 +4,6 @@
 # are needed.
 Style/StringLiterals:
   EnforcedStyle: double_quotes
+
+AllCops:
+  NewCops: enable
