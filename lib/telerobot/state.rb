@@ -91,7 +91,7 @@ module Telerobot
     end
 
     def current_chat
-      Chat.new(chat_id: session.chat_id, token: config.bot_token)
+      Chat.new(Telegram::Api.new(session.chat_id, config.bot_token))
     end
 
     def on_contact_receive

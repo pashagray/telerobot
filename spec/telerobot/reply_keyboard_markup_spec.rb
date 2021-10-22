@@ -6,11 +6,9 @@ RSpec.describe Telerobot::ReplyKeyboardMarkup do
 
     it "returns keyboard markup in correct format" do
       expect(subject.markup).to eq(
-        reply_markup: {
-          keyboard: [["a", "b", "c"], ["d", "f"]],
-          one_time_keyboard: true,
-          resize_keyboard: false
-        }
+        keyboard: [["a", "b", "c"], ["d", "f"]],
+        one_time_keyboard: true,
+        resize_keyboard: false
       )
     end
   end

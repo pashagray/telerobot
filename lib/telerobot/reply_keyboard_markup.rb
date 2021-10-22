@@ -11,11 +11,9 @@ module Telerobot
 
     def markup
       {
-        reply_markup: {
-          keyboard: @keyboard,
-          one_time_keyboard: @one_time_keyboard,
-          resize_keyboard: @resize_keyboard
-        }
+        keyboard: @keyboard,
+        one_time_keyboard: @one_time_keyboard,
+        resize_keyboard: @resize_keyboard
       }
     end
   end

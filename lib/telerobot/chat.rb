@@ -2,15 +2,15 @@
 
 module Telerobot
   class Chat
-    def initialize(chat_id:, token:)
-      @api = Telegram::Api.new(chat_id, token)
-      @message = nil
+    def initialize(api)
+      @api = api
+      @command = nil
       @photos = nil
       @keyboard = NoKeyboardMarkup.new
     end
 
-    def message(message)
-      @message = message
+    def message(text, options = {})
+      @command = SendMessage.new(text, options)
       self
     end
 
@@ -30,9 +30,7 @@ module Telerobot
     end
 
     def send_now
-      return @api.send_message(@message, @keyboard) unless @photos
-
-      @api.send_photo(@message, @photos, @keyboard) if @photos.size == 1
+      @api.request!(@command, @keyboard)
     end
   end
 end
