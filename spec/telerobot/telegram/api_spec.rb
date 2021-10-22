@@ -6,20 +6,7 @@ RSpec.describe Telerobot::Telegram::Api do
   end
 
   describe "#send_message" do
-    describe "when token and chat id valid" do
-      let(:token) { "token" }
-      let(:chat_id) { -1002387 }
-      let(:api) { Telerobot::Telegram::Api.new(chat_id, token) }
-
-      it "return success response" do
-        stub_request(:post, "https://api.telegram.org/bot#{token}/sendMessage")
-          .with(body: { chat_id: chat_id, text: "I'm message" }.to_json, headers: { "Content-Type" => "application/json" })
-          .to_return(status: 200, body: File.read("spec/fixtures/send_message_ok.json"))
-        expect(api.send_message("I'm message", {})).to be_a(Net::HTTPOK)
-      end
-    end
-
-    describe "when token invalid" do
+    context "when token invalid" do
       let(:token) { "invalidtoken" }
       let(:chat_id) { -1002387 }
       let(:api) { Telerobot::Telegram::Api.new(chat_id, token) }
@@ -28,11 +15,15 @@ RSpec.describe Telerobot::Telegram::Api do
         stub_request(:post, "https://api.telegram.org/bot#{token}/sendMessage")
           .with(body: { chat_id: chat_id, text: "I'm message" }.to_json, headers: { "Content-Type" => "application/json" })
           .to_return(status: 401, body: { ok: false, error_code: 401, description: "Unauthorized" }.to_json)
-        expect(api.send_message("I'm message", {})).to be_a(Net::HTTPUnauthorized)
+        res = api.send_message("I'm message")
+
+        expect(res.success?).to eq(false)
+        expect(res.error).to eq("Unauthorized")
+        expect(res.code).to eq(401)
       end
     end
 
-    describe "when chat not found" do
+    context "when chat not found" do
       let(:token) { "token" }
       let(:chat_id) { -10041265 }
       let(:api) { Telerobot::Telegram::Api.new(chat_id, token) }
@@ -41,20 +32,41 @@ RSpec.describe Telerobot::Telegram::Api do
         stub_request(:post, "https://api.telegram.org/bot#{token}/sendMessage")
           .with(body: { chat_id: chat_id, text: "I'm message" }.to_json, headers: { "Content-Type" => "application/json" })
           .to_return(status: 400, body: { ok: false, error_code: 400, description: "Bad Request: chat not found" }.to_json)
-        expect(api.send_message("I'm message", {})).to be_a(Net::HTTPBadRequest)
+
+        res = api.send_message("I'm message")
+
+        expect(res.success?).to eq(false)
+        expect(res.error).to eq("Bad Request: chat not found")
+        expect(res.code).to eq(400)
       end
     end
 
-    describe "when with invalid reply markup" do
+    context "when token and chat id valid" do
       let(:token) { "token" }
-      let(:chat_id) { -10041265 }
+      let(:chat_id) { -1002387 }
       let(:api) { Telerobot::Telegram::Api.new(chat_id, token) }
 
-      it "returns bad request error" do
-        stub_request(:post, "https://api.telegram.org/bot#{token}/sendMessage")
-          .with(body: { chat_id: chat_id, text: "I'm message", reply_markup: {keyboard: { text: "Button" }} }.to_json)
-          .to_return(status: 400, body: { ok: false, error_code: 400, description: "Bad Request" }.to_json)
-        expect(api.send_message("I'm message", { reply_markup: { keyboard: { text: "Button" }}})).to be_a(Net::HTTPBadRequest)
+      context "without keyboard" do
+        it "return success response" do
+          stub_request(:post, "https://api.telegram.org/bot#{token}/sendMessage")
+            .with(body: { chat_id: chat_id, text: "I'm message" }.to_json, headers: { "Content-Type" => "application/json" })
+            .to_return(status: 200, body: File.read("spec/fixtures/send_message_ok.json"))
+
+            res = api.send_message("I'm message")
+
+            expect(res.success?).to eq(true)
+            expect(res.error).to eq(nil)
+            expect(res.code).to eq(200)
+        end
+      end
+
+      context "with keyboard" do
+        it "return success response" do
+          stub_request(:post, "https://api.telegram.org/bot#{token}/sendMessage")
+            .with(body: { chat_id: chat_id, text: "I'm message", reply_markup: { keyboard: [["a", "b"], ["c"]], one_time_keyboard: false, resize_keyboard: false } }.to_json, headers: { "Content-Type" => "application/json" })
+            .to_return(status: 200, body: File.read("spec/fixtures/send_message_ok.json"))
+          expect(api.send_message("I'm message", Telerobot::ReplyKeyboardMarkup.new([["a", "b"], ["c"]]))).to be_a(Telerobot::Telegram::Response)
+        end
       end
     end
   end

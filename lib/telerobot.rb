@@ -8,7 +8,12 @@ require "telerobot/config"
 require "telerobot/session_mock"
 require "telerobot/chat"
 require "telerobot/state"
+require "telerobot/reply_keyboard_markup"
+require "telerobot/no_keyboard_markup"
 require "telerobot/telegram/api"
+require "telerobot/telegram/response"
+require "telerobot/telegram/methods/send_message"
+require "telerobot/telegram/methods/send_photo"
 
 module Telerobot
   class Error < StandardError; end

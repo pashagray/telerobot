@@ -6,8 +6,7 @@ module Telerobot
       @api = Telegram::Api.new(chat_id, token)
       @message = nil
       @photos = nil
-      @keyboard = nil
-      @inline_keyboard = nil
+      @keyboard = NoKeyboardMarkup.new
     end
 
     def message(message)
@@ -25,42 +24,15 @@ module Telerobot
       self
     end
 
-    def keyboard(keyboard, **options)
-      @keyboard = keyboard
-      @one_time_keyboard = options.fetch(:onetime, false)
-      @resize_keyboard = options.fetch(:resize, false)
-      self
-    end
-
-    def inline_keyboard(keyboard)
-      @inline_keyboard = keyboard
+    def keyboard(keyboard, options = {})
+      @keyboard = ReplyKeyboardMarkup.new(keyboard, options)
       self
     end
 
     def send_now
-      return @api.send_message(@message, reply_markup) unless @photos
+      return @api.send_message(@message, @keyboard) unless @photos
 
-      @api.send_photo(@message, *@photos, reply_markup) if @photos.size == 1
-    end
-
-    def reply_markup
-      reply_markup = {}
-
-      if @keyboard
-        reply_markup[:reply_markup] = {
-          keyboard: keyboard,
-          resize_keyboard: true,
-          one_time_keyboard: @one_time_keyboard
-        }
-      end
-
-      if @inline_keyboard
-        reply_markup[:reply_markup] = {
-          inline_keyboard: @inline_keyboard
-        }
-      end
-
-      reply_markup
+      @api.send_photo(@message, @photos, @keyboard) if @photos.size == 1
     end
   end
 end
