@@ -10,12 +10,12 @@ module Telerobot
     end
 
     def message(text, options = {})
-      @command = SendMessage.new(text, options)
+      @command = Commands::SendMessage.new(text, options)
       self
     end
 
-    def photo(photo)
-      photos([photo])
+    def photo(photo, options = {})
+      @command = Commands::SendPhoto.new(photo, options)
       self
     end
 

@@ -9,9 +9,10 @@ require "telerobot/session_mock"
 require "telerobot/chat"
 require "telerobot/state"
 require "telerobot/reply_keyboard_markup"
-require "telerobot/send_message"
+require "telerobot/commands/send_message"
+require "telerobot/commands/send_photo"
 require "telerobot/no_keyboard_markup"
-require "telerobot/telegram/api"
+require "telerobot/api"
 require "telerobot/telegram/response"
 
 module Telerobot
