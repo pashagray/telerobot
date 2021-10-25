@@ -37,6 +37,60 @@ RSpec.describe Telerobot::State do
       end
     end
 
+    describe "on photos receive" do
+      let(:message) do 
+        {
+          "chat_id": 1,
+          "photo": [
+            {"file_id"=>"A", "file_unique_id"=>"AA", "file_size"=>1, "width"=>2, "height"=>1 },
+            {"file_id"=>"A", "file_unique_id"=>"AB", "file_size"=>2, "width"=>4, "height"=>2 },
+            {"file_id"=>"A", "file_unique_id"=>"AC", "file_size"=>3, "width"=>6, "height"=>3 } # <- Original is the largest one
+          ] 
+        }
+      end
+
+      it "invokes on_photo_receive method" do
+        expect { StartState.new.call(message, {}, session) }
+          .to raise_error(Telerobot::Error)
+          .with_message(
+            <<~HEREDOC
+              Photo detected. Add logic to handle it.
+
+              Add photo receiving logic. All photos has similar file_id,
+              but different file_unique_id. Also you can access width, height
+              and file_size.
+
+              def on_photo_receive(photo)
+                # your_logic
+              end
+
+              -- Photo variants --
+
+              original:
+                file_id: A
+                file_unique_id: AC
+                width: 6
+                height: 3
+                file_size: 3
+
+              medium:
+                file_id: A
+                file_unique_id: AB
+                width: 4
+                height: 2
+                file_size: 2
+
+              small:
+                file_id: A
+                file_unique_id: AA
+                width: 2
+                height: 1
+                file_size: 1
+            HEREDOC
+          )
+      end
+    end
+
     describe "move to other state" do
       let(:message) { { chat_id: 1, text: "Second" } }
 

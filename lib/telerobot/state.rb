@@ -54,7 +54,7 @@ module Telerobot
       if message[:contact]
         on_contact_receive(message[:contact])
       elsif message[:photo]
-        on_photo_receive(message[:photo])
+        handle_photo_message(message[:photo])
       else
         self.class.mapping.keys.select { |key| key.class == String }.each do |map_key|
           option ||= map_key if @command == map_key
@@ -96,11 +96,14 @@ module Telerobot
       Chat.new(Api.new(session.chat_id, config.bot_token))
     end
 
-    def on_contact_receive(contact)
-      unknown_command
+    def handle_photo_message(photo_variants)
+      sorted_photos = photo_variants
+        .map { |photo| Utils.deep_symbolize_keys(photo) }
+        .sort_by { |photo| -photo[:file_size] }
+      on_photo_receive(*sorted_photos)
     end
 
-    def on_contact_receive(photo)
+    def on_contact_receive(contact)
       unknown_command
     end
 
@@ -118,6 +121,47 @@ module Telerobot
 
     def config
       self.class.config
+    end
+
+    def on_photo_receive(original, medium, small)
+      puts "!!!"
+      puts original.inspect
+      puts "!!!"
+      raise Error,
+        <<~HEREDOC
+          Photo detected. Add logic to handle it.
+
+          Add photo receiving logic. All photos has similar file_id,
+          but different file_unique_id. Also you can access width, height
+          and file_size.
+
+          def on_photo_receive(photo)
+            # your_logic
+          end
+
+          -- Photo variants --
+
+          original:
+            file_id: #{original[:file_id]}
+            file_unique_id: #{original[:file_unique_id]}
+            width: #{original[:width]}
+            height: #{original[:height]}
+            file_size: #{original[:file_size]}
+
+          medium:
+            file_id: #{medium[:file_id]}
+            file_unique_id: #{medium[:file_unique_id]}
+            width: #{medium[:width]}
+            height: #{medium[:height]}
+            file_size: #{medium[:file_size]}
+
+          small:
+            file_id: #{small[:file_id]}
+            file_unique_id: #{small[:file_unique_id]}
+            width: #{small[:width]}
+            height: #{small[:height]}
+            file_size: #{small[:file_size]}
+        HEREDOC
     end
 
     def unknown_command
