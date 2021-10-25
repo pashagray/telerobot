@@ -53,6 +53,8 @@ module Telerobot
       @command = (callback_query && callback_query[:data]) || message[:text]
       if message[:contact]
         handle_contact_message(message[:contact])
+      elsif message[:location]
+        handle_location_message(message[:location])
       elsif message[:photo]
         handle_photo_message(message[:photo])
       else
@@ -101,6 +103,11 @@ module Telerobot
       on_contact_receive(contact)
     end
 
+    def handle_location_message(location_data)
+      location = Types::Location.new(**Utils.deep_symbolize_keys(location_data))
+      on_location_receive(location)
+    end
+
     def handle_photo_message(photo_variants)
       sorted_photos = photo_variants
         .map { |photo| Utils.deep_symbolize_keys(photo) }
@@ -124,6 +131,56 @@ module Telerobot
     def config
       self.class.config
     end
+
+    def unknown_command
+      raise Error,
+        <<~HEREDOC
+          Unknown command +#{@command}+
+
+          Add it command_mapping:
+          command_mapping({
+            "#{@command}" => :your_method_to_be_ivoked
+          })
+
+          Also you can override unkown_command method to handle
+          such errors. Example:
+
+          def unknown_command
+            # your_logic
+          end
+        HEREDOC
+    end
+
+    def command_method_not_found
+      raise Error,
+        <<~HEREDOC
+          Command +#{@command}+ found, but correspoing method does not exist
+
+          Add method to your state:
+          def #{self.class.mapping[@command]}
+            # your logic
+          end
+        HEREDOC
+    end
+
+    def telegram_bot_token_missing
+      raise Error,
+        <<~HEREDOC
+          Bot token must be provided.
+          You should configure your class with telegram bot token
+          Add to your #{self.class.name} class configure class method
+          Example:
+            class #{self.class.name}
+              include Telerobot::State
+
+              configure do |config|
+                config.bot_token = "token"
+              end
+            end
+        HEREDOC
+    end
+
+    # Callbacks
 
     def on_photo_receive(original, medium, small)
       raise Error,
@@ -181,55 +238,25 @@ module Telerobot
         HEREDOC
     end
 
-    def unknown_command
+    def on_location_receive(location)
       raise Error,
         <<~HEREDOC
-          Unknown command +#{@command}+
+          User sent location. Add logic to handle it.
 
-          Add it command_mapping:
-          command_mapping({
-            "#{@command}" => :your_method_to_be_ivoked
-          })
-
-          Also you can override unkown_command method to handle
-          such errors. Example:
-
-          def unknown_command
+          def on_location_receive(location)
             # your_logic
           end
+
+          -- Location type --
+
+          longitude: #{location.longitude}
+          latitude: #{location.latitude}
+          horizontal_accuracy: #{location.horizontal_accuracy}
+          live_period: #{location.live_period}
+          heading: #{location.heading}
+          proximity_alert_radius: #{location.proximity_alert_radius}
         HEREDOC
     end
-
-    def command_method_not_found
-      raise Error,
-        <<~HEREDOC
-          Command +#{@command}+ found, but correspoing method does not exist
-
-          Add method to your state:
-          def #{self.class.mapping[@command]}
-            # your logic
-          end
-        HEREDOC
-    end
-
-    def telegram_bot_token_missing
-      raise Error,
-        <<~HEREDOC
-          Bot token must be provided.
-          You should configure your class with telegram bot token
-          Add to your #{self.class.name} class configure class method
-          Example:
-            class #{self.class.name}
-              include Telerobot::State
-
-              configure do |config|
-                config.bot_token = "token"
-              end
-            end
-        HEREDOC
-    end
-
-    # Callbacks
 
     # Callback invoked when exiting State
     def before_exit

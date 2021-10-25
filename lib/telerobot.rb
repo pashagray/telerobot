@@ -15,6 +15,7 @@ require "telerobot/commands/send_photo"
 require "telerobot/errors/file_not_found"
 require "telerobot/no_keyboard_markup"
 require "telerobot/types/contact"
+require "telerobot/types/location"
 require "telerobot/api"
 require "telerobot/telegram/response"
 
