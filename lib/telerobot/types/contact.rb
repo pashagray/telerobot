@@ -2,13 +2,11 @@
 
 module Telerobot
   module Types
-    Contact = Struct.new(
-      :phone_number,
-      :first_name,
-      :last_name,
-      :user_id,
-      :vcard,
-      keyword_init: true
-    )
+    class Contact < Base
+      attribute :phone_number, String
+      attribute :first_name, String
+      attribute :last_name, String
+      attribute :user_id, Integer
+    end
   end
 end

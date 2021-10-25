@@ -43,20 +43,20 @@ module Telerobot
       end
     end
 
-    def call(message, callback_query, session)
+    def call(message_params, callback_query, session)
       telegram_bot_token_missing unless config.bot_token
 
-      @message = Utils.deep_symbolize_keys(message)
+      @message = Types::Message.new(message_params)
       @callback_query = Utils.deep_symbolize_keys(callback_query)
       @session = session
       option = nil
-      @command = (callback_query && callback_query[:data]) || message[:text]
-      if message[:contact]
-        handle_contact_message(message[:contact])
-      elsif message[:location]
-        handle_location_message(message[:location])
-      elsif message[:photo]
-        handle_photo_message(message[:photo])
+      @command = (callback_query && callback_query[:data]) || message.text
+      if message.contact
+        handle_contact_message(message.contact)
+      elsif message.location
+        handle_location_message(message.location)
+      elsif message.photo
+        handle_photo_message(message.photo)
       else
         self.class.mapping.keys.select { |key| key.class == String }.each do |map_key|
           option ||= map_key if @command == map_key
@@ -98,20 +98,16 @@ module Telerobot
       Chat.new(Api.new(session.chat_id, config.bot_token))
     end
 
-    def handle_contact_message(contact_data)
-      contact = Types::Contact.new(**Utils.deep_symbolize_keys(contact_data))
+    def handle_contact_message(contact)
       on_contact_receive(contact)
     end
 
-    def handle_location_message(location_data)
-      location = Types::Location.new(**Utils.deep_symbolize_keys(location_data))
+    def handle_location_message(location)
       on_location_receive(location)
     end
 
     def handle_photo_message(photo_variants)
-      sorted_photos = photo_variants
-        .map { |photo| Utils.deep_symbolize_keys(photo) }
-        .sort_by { |photo| -photo[:file_size] }
+      sorted_photos = photo_variants.sort_by { |photo| -photo.file_size }
 
       on_photo_receive(*sorted_photos)
     end
@@ -198,25 +194,25 @@ module Telerobot
           -- Photo variants --
 
           original:
-            file_id: #{original[:file_id]}
-            file_unique_id: #{original[:file_unique_id]}
-            width: #{original[:width]}
-            height: #{original[:height]}
-            file_size: #{original[:file_size]}
+            file_id: #{original.file_id}
+            file_unique_id: #{original.file_unique_id}
+            width: #{original.width}
+            height: #{original.height}
+            file_size: #{original.file_size}
 
           medium:
-            file_id: #{medium[:file_id]}
-            file_unique_id: #{medium[:file_unique_id]}
-            width: #{medium[:width]}
-            height: #{medium[:height]}
-            file_size: #{medium[:file_size]}
+            file_id: #{medium.file_id}
+            file_unique_id: #{medium.file_unique_id}
+            width: #{medium.width}
+            height: #{medium.height}
+            file_size: #{medium.file_size}
 
           small:
-            file_id: #{small[:file_id]}
-            file_unique_id: #{small[:file_unique_id]}
-            width: #{small[:width]}
-            height: #{small[:height]}
-            file_size: #{small[:file_size]}
+            file_id: #{small.file_id}
+            file_unique_id: #{small.file_unique_id}
+            width: #{small.width}
+            height: #{small.height}
+            file_size: #{small.file_size}
         HEREDOC
     end
 
