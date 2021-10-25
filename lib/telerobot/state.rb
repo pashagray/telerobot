@@ -53,6 +53,8 @@ module Telerobot
       @command = (callback_query && callback_query[:data]) || message[:text]
       if message[:contact]
         on_contact_receive(message[:contact])
+      elsif message[:photo]
+        on_photo_receive(message[:photo])
       else
         self.class.mapping.keys.select { |key| key.class == String }.each do |map_key|
           option ||= map_key if @command == map_key
@@ -94,7 +96,11 @@ module Telerobot
       Chat.new(Api.new(session.chat_id, config.bot_token))
     end
 
-    def on_contact_receive
+    def on_contact_receive(contact)
+      unknown_command
+    end
+
+    def on_contact_receive(photo)
       unknown_command
     end
 
