@@ -3,10 +3,10 @@
 RSpec.describe Telerobot::Commands::SendPhoto do
   describe "#photo_to_send" do
     context "with file id" do
-      subject { described_class.new(123456789) }
+      subject { described_class.new("AQADD7QxGxWvsUty") }
 
       it "returns id" do
-        expect(subject.instance_variable_get(:@photo)).to eq(123456789)
+        expect(subject.instance_variable_get(:@photo)).to eq("AQADD7QxGxWvsUty")
       end
     end
 
@@ -23,13 +23,7 @@ RSpec.describe Telerobot::Commands::SendPhoto do
         subject { described_class.new("./spec/fixtures/robot.png") }
 
         it "returns file" do
-          expect(subject.instance_variable_get(:@photo).inspect).to eq(File.open("./spec/fixtures/robot.png").inspect) 
-        end
-      end
-
-      context "when file does not exist" do
-        it "raises error" do
-          expect { described_class.new("./spec/fixtures/bad_image.png") }.to raise_error(Telerobot::Errors::FileNotFound)
+          expect(subject.instance_variable_get(:@photo).inspect).to eq(File.open("./spec/fixtures/robot.png").inspect)
         end
       end
     end

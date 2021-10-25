@@ -13,12 +13,10 @@ module Telerobot
       end
 
       def photo_to_send(photo)
-        if photo.is_a?(Integer) || photo.start_with?(/https?:\/\//)
-          photo
-        elsif File.exist?(photo)
+        if File.exist?(photo)
           File.open(photo)
         else
-          raise Errors::FileNotFound, "Photo #{photo} does not exist"
+          photo
         end
       end
 
