@@ -43,18 +43,18 @@ module Telerobot
       end
     end
 
-    def call(message_params, callback_query, session)
+    def call(message_params, callback_query_params, session)
       telegram_bot_token_missing unless config.bot_token
 
       @message = Types::Message.new(message_params)
-      @callback_query = Utils.deep_symbolize_keys(callback_query)
+      @callback_query = Types::CallbackQuery.new(callback_query_params)
       @session = session
       option = nil
-      @command = (callback_query && callback_query[:data]) || message.text
+      @command = callback_query&.data || message.text
       if message.contact
-        handle_contact_message(message.contact)
+        on_contact_receive(message.contact)
       elsif message.location
-        handle_location_message(message.location)
+        on_location_receive(message.location)
       elsif message.photo
         handle_photo_message(message.photo)
       else
@@ -96,15 +96,7 @@ module Telerobot
 
     def current_chat
       Chat.new(Api.new(session.chat_id, config.bot_token))
-    end
-
-    def handle_contact_message(contact)
-      on_contact_receive(contact)
-    end
-
-    def handle_location_message(location)
-      on_location_receive(location)
-    end
+    end      
 
     def handle_photo_message(photo_variants)
       sorted_photos = photo_variants.sort_by { |photo| -photo.file_size }

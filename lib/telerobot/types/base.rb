@@ -9,7 +9,8 @@ module Telerobot
         String,
         TrueClass,
         FalseClass,
-        NilClass
+        NilClass,
+        Boolean
       ].freeze
 
       def self.attribute(attribute, type)
