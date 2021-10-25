@@ -52,7 +52,7 @@ module Telerobot
       option = nil
       @command = (callback_query && callback_query[:data]) || message[:text]
       if message[:contact]
-        on_contact_receive(message[:contact])
+        handle_contact_message(message[:contact])
       elsif message[:photo]
         handle_photo_message(message[:photo])
       else
@@ -96,15 +96,17 @@ module Telerobot
       Chat.new(Api.new(session.chat_id, config.bot_token))
     end
 
+    def handle_contact_message(contact_data)
+      contact = Types::Contact.new(**Utils.deep_symbolize_keys(contact_data))
+      on_contact_receive(contact)
+    end
+
     def handle_photo_message(photo_variants)
       sorted_photos = photo_variants
         .map { |photo| Utils.deep_symbolize_keys(photo) }
         .sort_by { |photo| -photo[:file_size] }
-      on_photo_receive(*sorted_photos)
-    end
 
-    def on_contact_receive(contact)
-      unknown_command
+      on_photo_receive(*sorted_photos)
     end
 
     def session
@@ -124,9 +126,6 @@ module Telerobot
     end
 
     def on_photo_receive(original, medium, small)
-      puts "!!!"
-      puts original.inspect
-      puts "!!!"
       raise Error,
         <<~HEREDOC
           Photo detected. Add logic to handle it.
@@ -161,6 +160,24 @@ module Telerobot
             width: #{small[:width]}
             height: #{small[:height]}
             file_size: #{small[:file_size]}
+        HEREDOC
+    end
+
+    def on_contact_receive(contact)
+      raise Error,
+        <<~HEREDOC
+          User sent contacts. Add logic to handle it.
+
+          def on_contact_receive(contact)
+            # your_logic
+          end
+
+          -- Contact type --
+
+          phone_number: #{contact.phone_number}
+          first_name: #{contact.first_name}
+          last_name: #{contact.last_name}
+          user_id: #{contact.user_id}
         HEREDOC
     end
 

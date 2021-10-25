@@ -37,6 +37,36 @@ RSpec.describe Telerobot::State do
       end
     end
 
+    describe "on contact receive" do
+      let(:message) do
+        {
+          "chat_id": 1,
+          "contact": {"phone_number"=>"+19993002001", "first_name"=>"John", "last_name"=>"Connor", "user_id"=>1 }
+        }
+      end
+
+      it "invokes on_contact_receive method" do
+        expect { StartState.new.call(message, {}, session) }
+          .to raise_error(Telerobot::Error)
+          .with_message(
+            <<~HEREDOC
+            User sent contacts. Add logic to handle it.
+
+            def on_contact_receive(contact)
+              # your_logic
+            end
+
+            -- Contact type --
+
+            phone_number: +19993002001
+            first_name: John
+            last_name: Connor
+            user_id: 1
+          HEREDOC
+          )
+      end
+    end
+
     describe "on photos receive" do
       let(:message) do 
         {
