@@ -117,37 +117,25 @@ RSpec.describe Telerobot::State do
           .with_message(
             <<~HEREDOC
               Photo detected. Add logic to handle it.
-
+    
               Add photo receiving logic. All photos has similar file_id,
               but different file_unique_id. Also you can access width, height
               and file_size.
-
-              def on_photo_receive(photo)
+    
+              def on_photo_receive(sizes, caption)
+                # sizes is array of PhotoSize
+                # caption is an optional String
+    
                 # your_logic
               end
-
-              -- Photo variants --
-
-              original:
-                file_id: A
-                file_unique_id: AC
-                width: 6
-                height: 3
-                file_size: 3
-
-              medium:
-                file_id: A
-                file_unique_id: AB
-                width: 4
-                height: 2
-                file_size: 2
-
-              small:
-                file_id: A
-                file_unique_id: AA
-                width: 2
-                height: 1
-                file_size: 1
+    
+              -- PhotoSize type --
+    
+              file_id: String
+              file_unique_id: String
+              width: Integer
+              height: Integer
+              file_size: Integer
             HEREDOC
           )
       end

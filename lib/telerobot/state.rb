@@ -56,7 +56,7 @@ module Telerobot
       elsif message.location
         on_location_receive(message.location)
       elsif message.photo
-        handle_photo_message(message.photo)
+        handle_photo_message(message.photo, message.caption)
       else
         self.class.mapping.keys.select { |key| key.class == String }.each do |map_key|
           option ||= map_key if @command == map_key
@@ -98,10 +98,10 @@ module Telerobot
       Chat.new(Api.new(session.chat_id, config.bot_token))
     end
 
-    def handle_photo_message(photo_variants)
+    def handle_photo_message(photo_variants, caption)
       sorted_photos = photo_variants.sort_by { |photo| -photo.file_size }
 
-      on_photo_receive(*sorted_photos)
+      on_photo_receive(sorted_photos, caption)
     end
 
     def session
@@ -170,7 +170,7 @@ module Telerobot
 
     # Callbacks
 
-    def on_photo_receive(original, medium, small)
+    def on_photo_receive(sizes, caption)
       raise Error,
         <<~HEREDOC
           Photo detected. Add logic to handle it.
@@ -179,32 +179,20 @@ module Telerobot
           but different file_unique_id. Also you can access width, height
           and file_size.
 
-          def on_photo_receive(photo)
+          def on_photo_receive(sizes, caption)
+            # sizes is array of PhotoSize
+            # caption is an optional String
+
             # your_logic
           end
 
-          -- Photo variants --
+          -- PhotoSize type --
 
-          original:
-            file_id: #{original.file_id}
-            file_unique_id: #{original.file_unique_id}
-            width: #{original.width}
-            height: #{original.height}
-            file_size: #{original.file_size}
-
-          medium:
-            file_id: #{medium.file_id}
-            file_unique_id: #{medium.file_unique_id}
-            width: #{medium.width}
-            height: #{medium.height}
-            file_size: #{medium.file_size}
-
-          small:
-            file_id: #{small.file_id}
-            file_unique_id: #{small.file_unique_id}
-            width: #{small.width}
-            height: #{small.height}
-            file_size: #{small.file_size}
+          file_id: String
+          file_unique_id: String
+          width: Integer
+          height: Integer
+          file_size: Integer
         HEREDOC
     end
 
