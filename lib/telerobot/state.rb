@@ -96,7 +96,7 @@ module Telerobot
 
     def current_chat
       Chat.new(Api.new(session.chat_id, config.bot_token))
-    end      
+    end
 
     def handle_photo_message(photo_variants)
       sorted_photos = photo_variants.sort_by { |photo| -photo.file_size }

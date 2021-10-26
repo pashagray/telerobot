@@ -28,6 +28,8 @@ module Telerobot
                 instance_variable_get(:"@#{attribute}") + [IMMEDIATE_TYPES.include?(type[:type]) ? elem : type[:type].new(elem)]
               )
             end
+          elsif value.is_a?(type)
+            instance_variable_set(:"@#{attribute}", value)
           # For singular values
           else
             instance_variable_set(:"@#{attribute}", IMMEDIATE_TYPES.include?(type) ? value : type.new(value))
