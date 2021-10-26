@@ -113,11 +113,11 @@ module Telerobot
     end
 
     def message
-      @message || {}
+      @message
     end
 
     def callback_query
-      @callback_query || {}
+      @callback_query
     end
 
     def config
