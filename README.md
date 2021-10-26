@@ -26,8 +26,8 @@ class MenuState
 
   def after_enter
     current_chat
-      .message("Type author name to find cool books or try your luck")
-      .keyboard([["I'm lucky!"]])
+      .add_message("Type author name to find cool books or try your luck")
+      .add_keyboard([["I'm lucky!"]])
       .send_now
   end
 

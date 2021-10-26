@@ -47,6 +47,7 @@ module Telerobot
       telegram_bot_token_missing unless config.bot_token
 
       @message = Types::Message.new(message_params)
+      @current_chat = @message.chat
       @callback_query = Types::CallbackQuery.new(callback_query_params)
       @session = session
       option = nil
@@ -95,7 +96,9 @@ module Telerobot
     end
 
     def current_chat
-      Chat.new(Api.new(session.chat_id, config.bot_token))
+      return nil unless @current_chat
+
+      @current_chat.attach_api(Api.new(config.bot_token))
     end
 
     def handle_photo_message(photo_variants, caption)

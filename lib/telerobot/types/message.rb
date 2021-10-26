@@ -6,6 +6,7 @@ module Telerobot
     class Message < Base
       attribute :message_id, Integer
       attribute :date, Integer
+      attribute :chat, Chat
       attribute :text, String
       attribute :caption, String
       attribute :contact, Contact

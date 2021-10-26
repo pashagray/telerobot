@@ -5,7 +5,7 @@ module Telerobot
     def self.find_or_create_by(chat_id:)
       new(chat_id: chat_id)
     end
-    
+
     def initialize(chat_id:, state: nil)
       @chat_id = chat_id
       @state = state

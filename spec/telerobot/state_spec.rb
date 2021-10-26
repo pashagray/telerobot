@@ -7,7 +7,7 @@ RSpec.describe Telerobot::State do
     let(:session) { Telerobot::SessionMock.new(chat_id: 1) }
 
     describe "command /start" do
-      let(:message) { { chat_id: 1, text: "/start" } }
+      let(:message) { { chat_id: 1, text: "/start", chat: { id: 1, type: "private" } } }
 
       it "accepts /start command and calls #start method" do
         expect { StartState.new.call(message, {}, session) }
@@ -117,20 +117,20 @@ RSpec.describe Telerobot::State do
           .with_message(
             <<~HEREDOC
               Photo detected. Add logic to handle it.
-    
+
               Add photo receiving logic. All photos has similar file_id,
               but different file_unique_id. Also you can access width, height
               and file_size.
-    
+
               def on_photo_receive(sizes, caption)
                 # sizes is array of PhotoSize
                 # caption is an optional String
-    
+
                 # your_logic
               end
-    
+
               -- PhotoSize type --
-    
+
               file_id: String
               file_unique_id: String
               width: Integer
@@ -225,14 +225,21 @@ RSpec.describe Telerobot::State do
   end
 
   describe "#current_chat" do
+    let(:message) { { message_id: 1, text: "/start", chat: { id: 1, type: "private" } } }
+    let(:session) { Telerobot::SessionMock.new(chat_id: 1) }
     let(:state) { StartState.new }
 
-    before do
-      allow(state).to receive(:session).and_return(OpenStruct.new(chat_id: 1))
+    context "when message is not received yet" do
+      it "returns Chat class object" do
+        expect(state.current_chat).to eq(nil)
+      end
     end
 
-    it "return Chat class object" do
-      expect(state.current_chat).to be_an_instance_of(Telerobot::Chat)
+    context "when message with chat is passed to call" do
+      it "returns Chat class object" do
+        state.call(message, {}, session)
+        expect(state.current_chat.id).to eq(1)
+      end
     end
   end
 
