@@ -141,6 +141,42 @@ RSpec.describe Telerobot::State do
       end
     end
 
+    describe "on sticker receive" do
+      let(:message) do 
+        {
+          "chat_id": 1,
+          "sticker": {"file_id"=>"A", "file_unique_id"=>"AA", "file_size"=>1, "width"=>2, "height"=>1, "emoji"=>"😀" }
+        }
+      end
+
+      it "invokes on_sticker_receive method" do
+        expect { StartState.new.call(message, {}, session) }
+          .to raise_error(Telerobot::Error)
+          .with_message(
+            <<~HEREDOC
+              Sticker detected. Add logic to handle it.
+      
+              def on_sticker_receive(sticker)
+                # your_logic
+              end
+      
+              -- Sticker type --
+      
+              file_id: String
+              file_unique_id: String
+              width: Integer
+              height: Integer
+              is_animated: Boolean
+              thumb: PhotoSize
+              emoji: String
+              set_name: String
+              mask_position: MaskPosition
+              file_size: Integer
+            HEREDOC
+          )
+      end
+    end
+
     describe "move to other state" do
       let(:message) { { chat_id: 1, text: "Second" } }
 

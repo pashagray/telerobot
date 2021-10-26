@@ -12,6 +12,7 @@ module Telerobot
       attribute :contact, Contact
       attribute :location, Location
       attribute :photo, array_of(PhotoSize)
+      attribute :sticker, Sticker
     end
   end
 end

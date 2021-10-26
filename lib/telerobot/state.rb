@@ -58,6 +58,8 @@ module Telerobot
         on_location_receive(message.location)
       elsif message.photo
         handle_photo_message(message.photo, message.caption)
+      elsif message.sticker
+        on_sticker_receive(message.sticker)
       else
         self.class.mapping.keys.select { |key| key.class == String }.each do |map_key|
           option ||= map_key if @command == map_key
@@ -196,6 +198,30 @@ module Telerobot
           file_unique_id: String
           width: Integer
           height: Integer
+          file_size: Integer
+        HEREDOC
+    end
+
+    def on_sticker_receive(sticker)
+      raise Error,
+        <<~HEREDOC
+          Sticker detected. Add logic to handle it.
+
+          def on_sticker_receive(sticker)
+            # your_logic
+          end
+
+          -- Sticker type --
+
+          file_id: String
+          file_unique_id: String
+          width: Integer
+          height: Integer
+          is_animated: Boolean
+          thumb: PhotoSize
+          emoji: String
+          set_name: String
+          mask_position: MaskPosition
           file_size: Integer
         HEREDOC
     end
