@@ -85,11 +85,12 @@ module Telerobot
     # Move to new State
     def move_to(new_state)
       before_exit
-      new_state.new.enter(@session)
+      new_state.new.enter(@session, @current_chat)
     end
 
-    def enter(session)
+    def enter(session, current_chat)
       @session = session
+      @current_chat = current_chat
       before_enter
       @session.update(state: self.class.to_s)
       after_enter
