@@ -19,6 +19,7 @@ class StartState < BaseState
     "/start" => :start,
     /[0-9]+/ => :regex_one,
     /[abc]{6}/ => :regex_two,
+    /\A@\w+\z/ => :regex_three,
     "Second" => :move_to_other_state_test,
     "Missing method" => :you_have_forgotten_me
   })
@@ -33,6 +34,10 @@ class StartState < BaseState
 
   def regex_two
     print "regex_two method invoked!"
+  end
+
+  def regex_three
+    print "regex_three method invoked!"
   end
 
   def move_to_other_state_test

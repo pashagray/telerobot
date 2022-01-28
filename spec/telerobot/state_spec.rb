@@ -24,15 +24,22 @@ RSpec.describe Telerobot::State do
             .to output("regex_one method invoked!").to_stdout
         end
       end
-    end
 
-    describe "regex for mapping commands" do
       context "pattern 2" do
         let(:message) { { chat_id: 1, text: "abccba" } }
 
         it "accepts command and maps it to method via regex" do
           expect { StartState.new.call(message, {}, session) }
             .to output("regex_two method invoked!").to_stdout
+        end
+      end
+
+      context "pattern 3" do
+        let(:message) { { chat_id: 1, text: "@test" } }
+
+        it "accepts command and maps it to method via regex" do
+          expect { StartState.new.call(message, {}, session) }
+            .to output("regex_three method invoked!").to_stdout
         end
       end
     end
