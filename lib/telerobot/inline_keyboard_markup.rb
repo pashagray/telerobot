@@ -17,7 +17,7 @@ module Telerobot
 
     def markup
       {
-        keyboard: @keyboard
+        inline_keyboard: @keyboard
       }
     end
   end

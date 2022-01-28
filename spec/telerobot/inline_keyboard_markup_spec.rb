@@ -23,7 +23,7 @@ RSpec.describe Telerobot::InlineKeyboardMarkup do
 
     it "returns keyboard markup in correct format" do
       expect(subject.markup).to eq(
-        keyboard:
+        inline_keyboard:
           [
             [
               {
