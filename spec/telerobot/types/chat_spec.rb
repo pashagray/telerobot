@@ -10,7 +10,7 @@ RSpec.describe Telerobot::Types::Chat do
     end
   end
 
-  describe "#photo" do
+  describe "#add_photo" do
     let(:chat) { described_class.new(chat_id: 1, token: "token") }
 
     it "return object with inserted @command instance variable" do
@@ -19,12 +19,21 @@ RSpec.describe Telerobot::Types::Chat do
     end
   end
 
-  describe "#keyboard" do
+  describe "#add_keyboard" do
     let(:chat) { described_class.new(chat_id: 1, token: "token") }
 
     it "return object with inserted @keyboard instance variable" do
       expect(chat.add_keyboard([["First button"]])).to be_an_instance_of(Telerobot::Types::Chat)
       expect(chat.instance_variable_get(:@keyboard)).to be_an_instance_of(Telerobot::ReplyKeyboardMarkup)
+    end
+  end
+
+  describe "#add_inline_keyboard" do
+    let(:chat) { described_class.new(chat_id: 1, token: "token") }
+
+    it "return object with inserted @keyboard instance variable" do
+      expect(chat.add_inline_keyboard([["First button"]])).to be_an_instance_of(Telerobot::Types::Chat)
+      expect(chat.instance_variable_get(:@keyboard)).to be_an_instance_of(Telerobot::InlineKeyboardMarkup)
     end
   end
 end

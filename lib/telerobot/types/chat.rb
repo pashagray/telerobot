@@ -37,6 +37,11 @@ module Telerobot
         self
       end
 
+      def add_inline_keyboard(inline_keyboard)
+        @keyboard = InlineKeyboardMarkup.new(inline_keyboard)
+        self
+      end
+
       def send_now
         raise 'API is not attached' unless @api
 
