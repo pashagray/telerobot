@@ -268,20 +268,42 @@ RSpec.describe Telerobot::State do
   end
 
   describe "#current_chat" do
-    let(:message) { { message_id: 1, text: "/start", chat: { id: 1, type: "private" } } }
-    let(:session) { Telerobot::SessionMock.new(chat_id: 1) }
-    let(:state) { StartState.new }
+    context "via message" do
+      let(:message) { { message_id: 1, text: "/start", chat: { id: 1, type: "private" } } }
+      let(:session) { Telerobot::SessionMock.new(chat_id: 1) }
+      let(:state) { StartState.new }
 
-    context "when message is not received yet" do
-      it "returns Chat class object" do
-        expect(state.current_chat).to eq(nil)
+      context "when message is not received yet" do
+        it "returns Chat class object" do
+          expect(state.current_chat).to eq(nil)
+        end
+      end
+
+      context "when message with chat is passed to call" do
+        it "returns Chat class object" do
+          state.call(message, {}, session)
+          expect(state.current_chat.id).to eq(1)
+        end
       end
     end
 
-    context "when message with chat is passed to call" do
-      it "returns Chat class object" do
-        state.call(message, {}, session)
-        expect(state.current_chat.id).to eq(1)
+    context "via callback query" do
+      let(:message) { { message_id: 1, text: "/start", chat: { id: 1, type: "private" } } }
+      let(:callback_query) { { data: "/start", message: { text: "/start", chat: { id: 2, type: "private" } } } }
+      let(:session) { Telerobot::SessionMock.new(chat_id: 1) }
+      let(:state) { StartState.new }
+
+      context "when message is not received yet" do
+        it "returns Chat class object" do
+          expect(state.current_chat).to eq(nil)
+        end
+      end
+
+      context "when message with chat is passed to call" do
+        it "returns Chat class object" do
+          state.call(message, callback_query, session)
+          expect(state.current_chat.id).to eq(2)
+        end
       end
     end
   end

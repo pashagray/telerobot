@@ -46,9 +46,9 @@ module Telerobot
     def call(message_params, callback_query_params, session)
       telegram_bot_token_missing unless config.bot_token
 
-      @message = Types::Message.new(message_params)
-      @current_chat = @message.chat
       @callback_query = Types::CallbackQuery.new(callback_query_params)
+      @message = @callback_query.message || Types::Message.new(message_params)
+      @current_chat = @message.chat
       @session = session
       option = nil
       @command = callback_query&.data || message.text
