@@ -22,6 +22,11 @@ module Telerobot
         self
       end
 
+      def edit_message_text(text, options = {})
+        @command = Commands::EditMessageText.new(text, options)
+        self
+      end
+
       def add_message(text, options = {})
         @command = Commands::SendMessage.new(text, options)
         self
