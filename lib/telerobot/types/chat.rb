@@ -22,11 +22,6 @@ module Telerobot
         self
       end
 
-      def edit_message_text(text, options = {})
-        @command = Commands::EditMessageText.new(text, options)
-        self
-      end
-
       def add_message(text, options = {})
         @command = Commands::SendMessage.new(text, options)
         self
@@ -44,6 +39,16 @@ module Telerobot
 
       def delete_message(message_id)
         @command = Commands::DeleteMessage.new(message_id: message_id)
+        self
+      end
+
+      def edit_message_caption(caption, options)
+        @command = Commands::EditMessageCaption.new(caption, options)
+        self
+      end
+
+      def edit_message_text(text, options = {})
+        @command = Commands::EditMessageText.new(text, options)
         self
       end
 
