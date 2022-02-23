@@ -42,6 +42,11 @@ module Telerobot
         self
       end
 
+      def delete_message(message_id)
+        @command = Commands::DeleteMessage.new(message_id: message_id)
+        self
+      end
+
       def edit_inline_keyboard(keyboard, message_id)
         @keyboard = InlineKeyboardMarkup.new(keyboard)
         @command = Commands::EditMessageReplyMarkup.new(message_id: message_id)
