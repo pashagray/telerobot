@@ -13,7 +13,7 @@ module Telerobot
 
       def body
         [
-          ["text", @text],
+          ["caption", @caption],
           ["parse_mode", @parse_mode],
           ["message_id", @message_id]
         ]
