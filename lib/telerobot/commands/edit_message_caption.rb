@@ -3,7 +3,7 @@
 module Telerobot
   module Commands
     class EditMessageCaption
-      METHOD = "editMessageText"
+      METHOD = "editMessageCaption"
 
       def initialize(caption, options = {})
         @caption = caption
