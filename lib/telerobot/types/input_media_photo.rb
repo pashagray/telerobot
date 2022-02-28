@@ -3,10 +3,23 @@
 module Telerobot
   module Types
     class InputMediaPhoto < Base
-      attribute :type, String
       attribute :media, String
       attribute :caption, String
-      attribute :parse_mode, String
+
+      def schema
+        [
+          ["type", "photo"],
+          ["media", @media],
+          ["caption", @caption],
+          ["parse_mode", "MarkdownV2"]
+        ]
+      end
+
+      def body
+        schema.map do |key, val|
+          [key, val] unless val.nil?
+        end.compact
+      end
     end
   end
 end
