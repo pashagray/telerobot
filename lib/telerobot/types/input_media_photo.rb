@@ -9,10 +9,18 @@ module Telerobot
       def markup
         {
           type: "photo",
-          media: @media,
+          media: "attach://#{attachment_name}",
           caption: @caption,
           parse_mode: "MarkdownV2"
         }
+      end
+
+      def attachment_name
+        @media_attach_name ||= SecureRandom.hex(10)
+      end
+
+      def attachment
+        @media
       end
     end
   end

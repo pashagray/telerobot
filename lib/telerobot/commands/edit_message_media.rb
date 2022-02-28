@@ -13,7 +13,8 @@ module Telerobot
       def schema
         [
           ["media", @media.markup.to_json],
-          ["message_id", @message_id]
+          ["message_id", @message_id],
+          [@media.attachment_name, @media.attachment]
         ]
       end
 

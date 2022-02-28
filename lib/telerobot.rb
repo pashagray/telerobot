@@ -2,6 +2,7 @@
 
 require "net/http"
 require "json"
+require "securerandom"
 require "telerobot/version"
 require "telerobot/utils"
 require "telerobot/config"
