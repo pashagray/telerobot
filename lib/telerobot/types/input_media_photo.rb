@@ -2,7 +2,8 @@
 
 module Telerobot
   module Types
-    class InputMedia < Base
+    class InputMediaPhoto < Base
+      attribute :type, String
       attribute :media, String
       attribute :caption, String
       attribute :parse_mode, String
