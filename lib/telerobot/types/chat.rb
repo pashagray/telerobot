@@ -47,6 +47,11 @@ module Telerobot
         self
       end
 
+      def edit_message_media(media, options)
+        @command = Commands::EditMessageMedia.new(media, options)
+        self
+      end
+
       def edit_message_text(text, options = {})
         @command = Commands::EditMessageText.new(text, options)
         self
