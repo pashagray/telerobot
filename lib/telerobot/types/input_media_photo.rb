@@ -6,19 +6,13 @@ module Telerobot
       attribute :media, String
       attribute :caption, String
 
-      def schema
-        [
-          ["type", "photo"],
-          ["media", @media],
-          ["caption", @caption],
-          ["parse_mode", "MarkdownV2"]
-        ]
-      end
-
-      def body
-        schema.map do |key, val|
-          [key, val] unless val.nil?
-        end.compact
+      def markup
+        {
+          type: "photo",
+          media: @media,
+          caption: @caption,
+          parse_mode: "MarkdownV2"
+        }
       end
     end
   end

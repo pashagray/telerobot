@@ -12,7 +12,7 @@ module Telerobot
 
       def schema
         [
-          ["media", @media.body],
+          ["media", @media.markup.to_json],
           ["message_id", @message_id]
         ]
       end
